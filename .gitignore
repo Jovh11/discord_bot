@@ -127,3 +127,12 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+config.py
+meme_repository.csv
+quote_df.csv
+quote_df3.csv
+quote_df2.csv
+fixer.csv
+Memebot.ipynb
+memefont.ipynb
+test.jpg
