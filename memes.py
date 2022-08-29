@@ -9,9 +9,17 @@ from config import token, server
 import asyncio
 import random
 
+class CustomerHelpCommand(commands.HelpCommand):
+    def __init__(self):
+        super().__init__()
+    async def send_bot_help(self, mapping):
+        for cog in mapping:
+            await self.get_destination().send(f'{["!" + command.name + " " + command.help for command in mapping[cog]]}')
+
+        
 meme_list = pd.read_csv('Resources/meme_repository.csv')
 load_dotenv()
-bot = commands.Bot(command_prefix='!', intents=discord.Intents(messages=True, message_content=True))
+bot = commands.Bot(command_prefix='!', intents=discord.Intents(messages=True, message_content=True), help_command=CustomerHelpCommand())
 client = discord.Client(intents=discord.Intents(messages=True, message_content=True))
 @client.event
 async def on_ready():
