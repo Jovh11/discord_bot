@@ -101,6 +101,8 @@ async def get_burn(ctx):
         await ctx.send("JK - Kingdom Hearts is a terrible franchise I can say that, I've been waiting for KH3 for 14 years")
     # Mickey's User ID
     elif ctx.message.author.id == 254099072695140352:
+        await ctx.send('I cannot insult you, you are too perfect')
+        sleep(10)
         await ctx.send('Futaba')
     else:
         await ctx.send('I cannot insult you, you are too perfect')
