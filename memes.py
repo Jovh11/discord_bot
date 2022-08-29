@@ -93,6 +93,7 @@ async def get_quote(ctx):
 
 @bot.command(name='self_burn', help='insult yourself')
 async def get_burn(ctx):
+    # Corey's User Id
     if ctx.message.author.id == 685569047739236408:
         await ctx.send("Kingdom Hearts is a terrible franchise")
     else:
