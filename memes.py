@@ -93,11 +93,14 @@ async def get_quote(ctx):
 
 @bot.command(name='self_burn', help='insult yourself')
 async def get_burn(ctx):
-    # Corey's User Id
+    # Corey's User ID
     if ctx.message.author.id == 685569047739236408:
-        await ctx.send("Kingdom Hearts is a terrible franchise")
+        await ctx.send('Kingdom Hearts is a terrible franchise')
+    # Mickey's User ID
+    elif ctx.message.author.id == 254099072695140352:
+        await ctx.send('Futaba')
     else:
-        await ctx.send("I cannot insult you, you are too perfect")
+        await ctx.send('I cannot insult you, you are too perfect')
 
 bot.run(token)
 
