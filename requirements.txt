@@ -1,0 +1,6 @@
+discord
+python-dotenv
+discord-config
+numpy
+pandas
+python-imap
