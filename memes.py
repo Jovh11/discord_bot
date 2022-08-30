@@ -92,6 +92,27 @@ async def get_quote(ctx):
     quote = quote_row['Quote'][0]
     await ctx.send(f'"{quote}"- {name}')
 
+@bot.command(name='quote_by', help='This will get a quote from a specific author')
+async def get_quoteby(ctx, name):
+    quote_df = pd.read_csv('Resources/quote_df.csv')
+    filter = name
+    filtered = quote_df.loc[quote_df['Name'].str.contains(filter)]
+    filtered_row = filtered.sample().reset_index(drop=True)
+    author = filtered_row['Name'][0]
+    quote = filtered_row['Quote'][0]
+    await ctx.send(f'"{quote}"-{author}')
+
+@bot.command(name='quote_with', help='This will call a quote containing the word(s) invoked')
+async def get_quotewith(ctx, fragment):
+    quote_df = pd.read_csv('Resources/quote_df.csv')
+    filter = fragment
+    filtered = quote_df.loc[quote_df['Quote'].str.contains(filter)]
+    filtered_row = filtered.sample().reset_index(drop=True)
+    author = filtered_row['Name'][0]
+    quote = filtered_row['Quote'][0]
+    await ctx.send(f'"{quote}"-{author}')
+
+
 @bot.command(name='self_burn', help='insult yourself')
 async def get_burn(ctx):
     # Corey's User ID
