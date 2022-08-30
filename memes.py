@@ -88,8 +88,6 @@ async def quote_this(ctx):
     all_quote_df = all_quote_df.drop((all_quote_df.columns[0]), axis=1).reset_index(drop=True)
     text = await ctx.channel.fetch_message(ctx.message.reference.message_id)
     name = text.author.name
-    name = str(name)
-    name = name[0:-5]
     print(type(name))
     quote = text.content
     new_quote = {}
