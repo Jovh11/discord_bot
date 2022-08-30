@@ -9,6 +9,7 @@ from dotenv import load_dotenv
 from config import token, server
 import asyncio
 import random
+from React import win_slips
 
 class CustomerHelpCommand(commands.HelpCommand):
     def __init__(self):
@@ -166,6 +167,10 @@ async def fifty(ctx):
     phrase = phrases[random.randint(0,(len(phrases) -1))]
     await ctx.send(f'{name} you are {phrase}')
 
+@bot.command(name='win', help='shows you what happens when you are winning')
+async def win(ctx):
+    filepath = win_slips
+    await ctx.send(file=discord.File(filepath))
 
 bot.run(token)
 
