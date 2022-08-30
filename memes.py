@@ -20,6 +20,7 @@ class CustomerHelpCommand(commands.HelpCommand):
 
         
 meme_list = pd.read_csv('Resources/meme_repository.csv')
+react_list = pd.read_csv('Resources/react_repository.csv')
 load_dotenv()
 bot = commands.Bot(command_prefix='!', intents=discord.Intents(messages=True, message_content=True), help_command=CustomerHelpCommand())
 client = discord.Client(intents=discord.Intents(messages=True, message_content=True))
@@ -172,5 +173,13 @@ async def win(ctx):
     filepath = win_slips
     await ctx.send(file=discord.File(filepath))
 
+@bot.command(name='react', help='tells you how to feel about something')
+async def react(ctx):
+    author = ctx.message.author.name
+    single_react = react_list.sample().reset_index(drop=True)
+    filepath = single_react['Filepath'].values[0]
+    phrases = ['happy', 'sad', 'lazy', 'hopeless', 'miserable', 'full of ennui', 'despair', 'joy', 'ligma', 'testy', 'frustrated', 'horny', 'violent', 'mopey', 'sprightly']
+    feeling = phrases[random.randint(0,(len(phrases)-1))]
+    await ctx.send(f'{author} you should feel {feeling} clearly as shown here:', file=discord.File(filepath))
 bot.run(token)
 
