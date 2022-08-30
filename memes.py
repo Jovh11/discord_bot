@@ -82,6 +82,32 @@ async def add_quote(ctx):
     print(all_quote_df)
     all_quote_df.to_csv('Resources/quote_df.csv')
 
+@bot.command(name='quote_this', help='This will add what you replied to as a quote')
+async def quote_this(ctx):
+    all_quote_df = pd.read_csv('Resources/quote_df.csv')
+    all_quote_df = all_quote_df.drop((all_quote_df.columns[0]), axis=1).reset_index(drop=True)
+    text = await ctx.channel.fetch_message(ctx.message.reference.message_id)
+    name = text.author
+    name = str(name)
+    name = name[0:-5]
+    print(type(name))
+    quote = text.content
+    new_quote = {}
+    new_quote['Name'] = 'Quote'
+    new_quote[name] = quote
+    quote_list = []
+    quote_list.append(new_quote)
+    await ctx.send(f"name is {name} and quote is {quote}")
+    quote_df = pd.DataFrame.from_dict(quote_list)
+    quote_df = quote_df.T
+    quote_df.to_csv('fixer.csv')
+    quote_df = pd.read_csv('fixer.csv')
+    quote_df.columns = quote_df.iloc[0]
+    quote_df = quote_df.drop(quote_df.index[0]).reset_index(drop=True)
+    all_quote_df= pd.concat([all_quote_df, quote_df], ignore_index=True)
+    all_quote_df.to_csv('Resources/quote_df.csv')
+
+
 @bot.command(name='quote', help='This will call a random quote')
 async def get_quote(ctx):
     quote_df = pd.read_csv('Resources/quote_df.csv')
@@ -91,6 +117,10 @@ async def get_quote(ctx):
     name = quote_row['Name'][0]
     quote = quote_row['Quote'][0]
     await ctx.send(f'"{quote}"- {name}')
+    quote_df.to_csv('fixer.csv')
+    quote_df = pd.read_csv('fixer.csv')
+    quote_df.columns = quote_df.iloc[0]
+    quote_df = quote_df.drop(quote_df.index[0]).reset_index(drop=True)
 
 @bot.command(name='quote_by', help='This will get a quote from a specific author')
 async def get_quoteby(ctx, name):
