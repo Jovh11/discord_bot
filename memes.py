@@ -161,7 +161,7 @@ async def get_burn(ctx):
 @bot.command(name='5050', help='It will either burn you or bless you luck of the draw and all that')
 async def fifty(ctx):
     phrases = ['perfect', 'a true friend in these trying times', 'a gigachad', 'based asf', 'a man of culture',\
-        'a gift', 'someone who I respect', 'my homie', 'a fellow warrior whom I respect', 'a real gamer',\
+        'a gift', 'someone who I respect', 'my homie', 'a fellow warrior whom I treat with honor', 'a real gamer',\
             'kinda cringe tbh', 'not very cash money', 'a third rate duelist with a fourth rate deck', 'mids', 'a normie',\
                 'a proud Anthem owner', 'a paste connoisseur', 'a Belieber', 'a narc', 'like that annoying npc from the starter town']
     name = ctx.message.author.name
