@@ -4,3 +4,6 @@ discord-config
 numpy
 pandas
 python-imap
+aiohttp
+bs4
+requests
