@@ -52,7 +52,6 @@ async def add_quote(ctx):
     #all_quote_df.columns = all_quote_df.iloc[0]
     #all_quote_df = all_quote_df.drop(all_quote_df.index[0]).reset_index(drop=True)
     all_quote_df = all_quote_df.drop((all_quote_df.columns[0]), axis=1).reset_index(drop=True)
-    print(all_quote_df)
     i = 0
     await ctx.send('Who said the quote?')
     def check(msg):
@@ -74,15 +73,11 @@ async def add_quote(ctx):
     quote_list.append(new_quote)
     await ctx.send(f"name is {name} and quote is {quote}")
     quote_df = pd.DataFrame.from_dict(quote_list)
-    #print(quote_df)
-    #quote_df = quote_df.rename(columns={0:'Name', 1:'Quote'})
     quote_df = quote_df.T
-    #print(quote_df)
     quote_df.to_csv('fixer.csv')
     quote_df = pd.read_csv('fixer.csv')
     quote_df.columns = quote_df.iloc[0]
     quote_df = quote_df.drop(quote_df.index[0]).reset_index(drop=True)
-    #quote_df.to_csv('Resources/debug.csv')
     print(quote_df)
     all_quote_df= pd.concat([all_quote_df, quote_df], ignore_index=True)
     print(all_quote_df)
@@ -94,7 +89,6 @@ async def quote_this(ctx):
     all_quote_df = all_quote_df.drop((all_quote_df.columns[0]), axis=1).reset_index(drop=True)
     text = await ctx.channel.fetch_message(ctx.message.reference.message_id)
     name = text.author.name
-    print(type(name))
     quote = text.content
     new_quote = {}
     new_quote['Name'] = 'Quote'
@@ -186,25 +180,36 @@ async def react(ctx):
     feeling = phrases[random.randint(0,(len(phrases)-1))]
     await ctx.send(f'{author} you should feel {feeling} clearly as shown here:', file=discord.File(filepath))
 
-@bot.event
-async def on_message(message):
-    if message.author.bot:
-        return
-    # Corey's User ID
-    if message.author.id == 685569047739236408 and not message.content.startswith("Oh beautiful bot"):
-        await message.channel.send('meep')
-    check = message.content.lower()
-    regex = r"\bign|ign.com"
-    if re.search(regex, check):
-        if message.reference is None:
-            async with aiohttp.ClientSession() as session:
-                link = scrape_google_images.get_random_image_link_from_google('ign memes')
-                async with session.get(link) as resp:
-                    if resp.status != 200:
-                        return await message.channel.send('Damn it Corey, you broke it')
-                    data = io.BytesIO(await resp.read())
-                    await message.channel.send(file=discord.File(data, link))
-    await bot.process_commands(message)
+@bot.command(name='news', help='calls mufti news forth')
+async def news(ctx):
+    if ctx.message.reference is not None:
+        text = await ctx.channel.fetch_message(ctx.message.reference.message_id)
+        name = text.author.name
+        message = text.content
+        await text.reply(f'{name} that is haram')
+
+
+# @bot.event
+# async def on_message(message):
+#     if message.author.bot:
+#         return
+#     # Corey's User ID
+#     if message.author.id == 685569047739236408 and not message.content.startswith("Oh beautiful bot"):
+#         await message.channel.send('meep')
+#     check = message.content.lower()
+#     regex = r"\bign|ign.com"
+#     if re.search(regex, check):
+#         if message.reference is None:
+#             async with aiohttp.ClientSession() as session:
+#                 link = scrape_google_images.get_random_image_link_from_google('ign memes')
+#                 async with session.get(link) as resp:
+#                     if resp.status != 200:
+#                         return await message.channel.send('Damn it Corey, you broke it')
+#                     data = io.BytesIO(await resp.read())
+#                     await message.channel.send(file=discord.File(data, link))
+#     await bot.process_commands(message)
+
+
 
 bot.run(token)
 
