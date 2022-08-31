@@ -13,7 +13,7 @@ from React import win_slips
 import io
 import aiohttp
 import scrape_google_images
-
+import re
 
 class CustomerHelpCommand(commands.HelpCommand):
     def __init__(self):
@@ -194,15 +194,16 @@ async def on_message(message):
     if message.author.id == 685569047739236408 and not message.content.startswith("Oh beautiful bot"):
         await message.channel.send('meep')
     check = message.content.lower()
-    print(check)
-    if 'ign' in check:
-        async with aiohttp.ClientSession() as session:
-            link = scrape_google_images.get_random_image_link_from_google('ign memes')
-            async with session.get(link) as resp:
-                if resp.status != 200:
-                    return await message.channel.send('Damn it Corey, you broke it')
-                data = io.BytesIO(await resp.read())
-                await message.channel.send(file=discord.File(data, link))
+    regex = r"\bign|ign.com"
+    if re.search(regex, check):
+        if message.reference is None:
+            async with aiohttp.ClientSession() as session:
+                link = scrape_google_images.get_random_image_link_from_google('ign memes')
+                async with session.get(link) as resp:
+                    if resp.status != 200:
+                        return await message.channel.send('Damn it Corey, you broke it')
+                    data = io.BytesIO(await resp.read())
+                    await message.channel.send(file=discord.File(data, link))
     await bot.process_commands(message)
 
 bot.run(token)
