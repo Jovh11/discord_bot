@@ -49,8 +49,6 @@ async def memes(ctx):
 @bot.command(name='add_quote', help='This will allow you to interact with me to make a quote in our list')
 async def add_quote(ctx):
     all_quote_df = pd.read_csv('Resources/quote_df.csv')
-    #all_quote_df.columns = all_quote_df.iloc[0]
-    #all_quote_df = all_quote_df.drop(all_quote_df.index[0]).reset_index(drop=True)
     all_quote_df = all_quote_df.drop((all_quote_df.columns[0]), axis=1).reset_index(drop=True)
     i = 0
     await ctx.send('Who said the quote?')
@@ -110,8 +108,6 @@ async def quote_this(ctx):
 async def get_quote(ctx):
     quote_df = pd.read_csv('Resources/quote_df.csv')
     quote_row = quote_df.sample().reset_index(drop=True)
-    print(quote_df)
-    print(quote_row)
     name = quote_row['Name'][0]
     quote = quote_row['Quote'][0]
     await ctx.send(f'"{quote}"- {name}')
