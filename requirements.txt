@@ -1,4 +1,4 @@
-discord
+discord.py
 python-dotenv
 discord-config
 numpy
@@ -7,3 +7,4 @@ python-imap
 aiohttp
 bs4
 requests
+asyncio

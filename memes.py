@@ -193,7 +193,9 @@ async def on_message(message):
     # Corey's User ID
     if message.author.id == 685569047739236408 and not message.content.startswith("Oh beautiful bot"):
         await message.channel.send('meep')
-    if 'ign' in message.content.lower:
+    check = message.content.lower()
+    print(check)
+    if 'ign' in check:
         async with aiohttp.ClientSession() as session:
             link = scrape_google_images.get_random_image_link_from_google('ign memes')
             async with session.get(link) as resp:
@@ -201,7 +203,7 @@ async def on_message(message):
                     return await message.channel.send('Damn it Corey, you broke it')
                 data = io.BytesIO(await resp.read())
                 await message.channel.send(file=discord.File(data, link))
-
+    await bot.process_commands(message)
 
 bot.run(token)
 

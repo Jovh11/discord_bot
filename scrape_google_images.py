@@ -19,7 +19,7 @@ def get_random_image_link_from_google(query):
     }
 
     html = requests.get("https://www.google.com/search", params=params, headers=headers)
-    soup = BeautifulSoup(html.text, "lxml")
+    soup = BeautifulSoup(html.text, "html.parser")
     image_list = get_original_images(soup)
     return random.choice(image_list)['original']
 
