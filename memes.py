@@ -10,6 +10,10 @@ from config import token, server
 import asyncio
 import random
 from React import win_slips
+import io
+import aiohttp
+import scrape_google_images
+
 
 class CustomerHelpCommand(commands.HelpCommand):
     def __init__(self):
@@ -181,5 +185,23 @@ async def react(ctx):
     phrases = ['happy', 'sad', 'lazy', 'hopeless', 'miserable', 'full of ennui', 'despair', 'joy', 'ligma', 'testy', 'frustrated', 'horny', 'violent', 'mopey', 'sprightly']
     feeling = phrases[random.randint(0,(len(phrases)-1))]
     await ctx.send(f'{author} you should feel {feeling} clearly as shown here:', file=discord.File(filepath))
+
+@bot.event
+async def on_message(message):
+    if message.author.bot:
+        return
+    # Corey's User ID
+    if message.author.id == 685569047739236408 and not message.content.startswith("Oh beautiful bot"):
+        await message.channel.send('meep')
+    if 'ign' in message.content.lower:
+        async with aiohttp.ClientSession() as session:
+            link = scrape_google_images.get_random_image_link_from_google('ign memes')
+            async with session.get(link) as resp:
+                if resp.status != 200:
+                    return await message.channel.send('Damn it Corey, you broke it')
+                data = io.BytesIO(await resp.read())
+                await message.channel.send(file=discord.File(data, link))
+
+
 bot.run(token)
 
