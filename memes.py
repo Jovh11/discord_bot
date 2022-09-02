@@ -23,6 +23,7 @@ class CustomerHelpCommand(commands.HelpCommand):
             await self.get_destination().send(f'{["!" + command.name + " " + command.help for command in mapping[cog]]}')
 
         
+chug_counter = 0
 meme_list = pd.read_csv('Resources/meme_repository.csv')
 react_list = pd.read_csv('Resources/react_repository.csv')
 load_dotenv()
@@ -183,6 +184,24 @@ async def news(ctx):
         name = text.author.name
         message = text.content
         await text.reply(f'{name} that is haram')
+
+
+@bot.command(name='train', help='chugga chugga')
+async def train(ctx):
+    global chug_counter
+    chugga = [' chugga ', 'chugga ', 'chOO ', 'CHOO ']
+    return_val = "Look out the train's a coming"
+    if chug_counter < 4:
+        range_lim = chug_counter + 1
+        for i in range(0, range_lim):
+            chug = chugga[i]
+            return_val = return_val + chug
+        await ctx.send(return_val)
+        chug_counter += 1
+    elif chug_counter >= 4:
+        return_val = "Whew that was close the train just left"
+        chug_counter = 0
+        await ctx.send(return_val)
 
 
 # @bot.event
