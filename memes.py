@@ -244,11 +244,15 @@ async def trolley(ctx):
     if side == 'right':
         await ctx.send(f'You chose to let {first_track_name} and {first_track_modifier} die. Congraulations!')
 
-    
-    # async for member in discord.Guild.get_member():
-    #     user_list.append(member.name)
-    # print(user_list)
-
+@bot.command(name='14', help='This correct names FFXIV')
+async def ffxiv(ctx):
+    if ctx.message.author.bot:
+        return
+    if ctx.message.reference is not None:
+        text = await ctx.channel.fetch_message(ctx.message.reference.message_id)
+        name = text.author.name
+        pasta = 'The critically acclaimed MMORPG Final Fantasy XIV? With an expanded free trial which you can play through the entirety of A Realm Reborn and the award winning Heavensward expansion up to level 60 for free with no restrictions on playtime.'    
+        await ctx.send(f'{name} are you referring to {pasta}?')
 # @bot.event
 # async def on_message(message):
 #     if message.author.bot:
