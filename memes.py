@@ -251,7 +251,7 @@ async def ffxiv(ctx):
     if ctx.message.reference is not None:
         text = await ctx.channel.fetch_message(ctx.message.reference.message_id)
         name = text.author.name
-        pasta = 'The critically acclaimed MMORPG Final Fantasy XIV? With an expanded free trial which you can play through the entirety of A Realm Reborn and the award winning Heavensward expansion up to level 60 for free with no restrictions on playtime.'    
+        pasta = 'The critically acclaimed MMORPG Final Fantasy XIV? With an expanded free trial which you can play through the entirety of A Realm Reborn and the award winning Heavensward expansion up to level 60 for free with no restrictions on playtime'    
         await ctx.send(f'{name} are you referring to {pasta}?')
 # @bot.event
 # async def on_message(message):
