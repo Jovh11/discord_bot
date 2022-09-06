@@ -27,8 +27,8 @@ chug_counter = 0
 meme_list = pd.read_csv('Resources/meme_repository.csv')
 react_list = pd.read_csv('Resources/react_repository.csv')
 load_dotenv()
-bot = commands.Bot(command_prefix='!', intents=discord.Intents(messages=True, message_content=True), help_command=CustomerHelpCommand())
-client = discord.Client(intents=discord.Intents(messages=True, message_content=True))
+bot = commands.Bot(command_prefix='!', intents=discord.Intents(messages=True, message_content=True, guilds=True, members=True), help_command=CustomerHelpCommand())
+client = discord.Client(intents=discord.Intents(messages=True, message_content=True, guilds=True, members=True))
 @client.event
 async def on_ready():
     for guild in client.guilds:
@@ -203,6 +203,51 @@ async def train(ctx):
         chug_counter = 0
         await ctx.send(return_val)
 
+@bot.command(name='whats_this', help='fixes incorrect speech')
+async def uwu(ctx):
+    if ctx.message.reference is not None:
+        text = await ctx.fetch_message(ctx.message.reference.message_id)
+        name = text.author.name
+        message = text.content
+        fixes = ['l', 'r', 'L', 'R']
+        for val in fixes:
+            message = message.replace(val, 'w')
+        await text.reply(f'uwu {name} I think you mean {message}')
+
+@bot.command(name='dilemma', help='This calls up a moral dilemma of unfathomable difficulty')
+async def trolley(ctx):
+    if ctx.message.author.bot:
+        return
+    members = ctx.guild.members
+    user_list = []
+    modifier_list = ['Clifford the Big Red Dog', 'Charlie Sheen', 'a real wizard', 'the potion seller', 'a sad looking horse', 'the ghost of my hopes and dreams', 'a cute puppy',\
+        'terminally sick orphans', 'Naruto Uzamaki', 'a real life catgirl', 'the inventor of femboy hooters', 'Jeff Bezos', "Tupac (he's always been alive idiot)", 'Aslan',\
+            'Rick Astley', 'Ligma Larry', 'Steve Jobs', 'an Italian chef', 'the guy who decided to put all that sugar into PF Changs sauce']
+    for member in members:
+       user_list.append(member.name)
+    user_list.remove(ctx.message.author.name)
+    first_track_name = user_list[random.randint(0,(len(user_list) - 1))]
+    user_list.remove(first_track_name)
+    second_track_name = user_list[random.randint(0,(len(user_list) - 1))]
+    first_track_modifier = modifier_list[random.randint(0,(len(modifier_list) - 1))]
+    modifier_list.remove(first_track_modifier)
+    second_track_modifier = modifier_list[random.randint(0,(len(modifier_list) - 1))]
+    def check(msg):
+        return msg.author == ctx.author and msg.channel == ctx.channel
+    await ctx.send(f'You are sitting at the switch for trolley tracks to your left you see {first_track_name} and {first_track_modifier} tied to the track, on the right track you see {second_track_name} and {second_track_modifier} tied down a trolley is hurtling towards you and these individuals who do you save the left or right track?')
+    side_msg = await bot.wait_for('message', check=check)
+    side = side_msg.content
+    side = side.lower()
+    await ctx.send(f'You said {side}')
+    if side == 'left':
+        await ctx.send(f'You chose to let {second_track_name} and {second_track_modifier} die. Congratulations!')
+    if side == 'right':
+        await ctx.send(f'You chose to let {first_track_name} and {first_track_modifier} die. Congraulations!')
+
+    
+    # async for member in discord.Guild.get_member():
+    #     user_list.append(member.name)
+    # print(user_list)
 
 # @bot.event
 # async def on_message(message):
