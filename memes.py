@@ -241,8 +241,10 @@ async def trolley(ctx):
     await ctx.send(f'You said {side}')
     if side == 'left':
         await ctx.send(f'You chose to let {second_track_name} and {second_track_modifier} die. Congratulations!')
-    if side == 'right':
+    elif side == 'right':
         await ctx.send(f'You chose to let {first_track_name} and {first_track_modifier} die. Congraulations!')
+    else:
+        await ctx.send(f'Your indecision let {first_track_name}, {second_track_name}, {first_track_modifier}, and {second_track_modifier} die. Congratulations!')
 
 @bot.command(name='14', help='This correct names FFXIV')
 async def ffxiv(ctx):
