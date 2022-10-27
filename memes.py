@@ -17,6 +17,7 @@ from constants import *
 
 meme_list = ['{}/{}'.format(MEMES_PATH, filename) for filename in os.listdir(MEMES_PATH) if not filename.endswith('.csv')]
 react_list = ['{}/{}'.format(REACTIONS_PATH, filename) for filename in os.listdir(REACTIONS_PATH)]
+hottakes_list = ['{}/{}'.format(HOT_TAKES_PATH, filename) for filename in os.listdir(HOT_TAKES_PATH)]
 win_slips = WIN_SLIPS_PATH
 
 class CustomerHelpCommand(commands.HelpCommand):
@@ -256,6 +257,13 @@ async def ffxiv(ctx):
         name = text.author.name
         pasta = 'The critically acclaimed MMORPG Final Fantasy XIV? With an expanded free trial which you can play through the entirety of A Realm Reborn and the award winning Heavensward expansion up to level 60 for free with no restrictions on playtime'    
         await ctx.send(f'{name} are you referring to {pasta}?')
+
+@bot.command(name='hottake', help='This calls a sizzling hot take')
+async def hottakes(ctx):
+    return_statements=['This is sure to start a discussion', 'God how insightful', "#GetHimAMuzzle", 'This move has upper-middle management written all over it', 'Wise Richard.jpg', 'More like Damndrew Dunn amirite?']
+    return_statement= return_statements[random.randint(0,(len(return_statements) -1))]
+    filepath = random.choice(hottakes_list)
+    await ctx.send(return_statement, file=discord.File(filepath))
 # @bot.event
 # async def on_message(message):
 #     if message.author.bot:
