@@ -26,6 +26,7 @@ class CustomerHelpCommand(commands.HelpCommand):
 chug_counter = 0
 meme_list = pd.read_csv('Resources/meme_repository.csv')
 react_list = pd.read_csv('Resources/react_repository.csv')
+takes_list = pd.read_csv('Resources/takes_repository.csv')
 load_dotenv()
 bot = commands.Bot(command_prefix='!', intents=discord.Intents(messages=True, message_content=True, guilds=True, members=True), help_command=CustomerHelpCommand())
 client = discord.Client(intents=discord.Intents(messages=True, message_content=True, guilds=True, members=True))
@@ -45,6 +46,14 @@ async def memes(ctx):
     return_statement= return_statements[random.randint(0,(len(return_statements) -1))]
     single_meme = meme_list.sample().reset_index(drop=True)
     filepath = single_meme['Filepath'].values[0]
+    await ctx.send(return_statement, file=discord.File(filepath))
+
+@bot.command(name='hottake', help='This calls a sizzling hot take')
+async def memes(ctx):
+    return_statements=['This is sure to start a discussion', 'God how insightful', "#GetHimAMuzzle", 'This move has upper-middle management written all over it', 'Wise Richard.jpg', 'More like Damndrew Dunn amirite?']
+    return_statement= return_statements[random.randint(0,(len(return_statements) -1))]
+    single_take = takes_list.sample().reset_index(drop=True)
+    filepath = single_take['Filepath'].values[0]
     await ctx.send(return_statement, file=discord.File(filepath))
 
 @bot.command(name='add_quote', help='This will allow you to interact with me to make a quote in our list')
