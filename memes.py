@@ -9,11 +9,16 @@ from dotenv import load_dotenv
 from config import token, server
 import asyncio
 import random
-from React import win_slips
 import io
 import aiohttp
 import scrape_google_images
 import re
+from constants import *
+
+meme_list = ['{}/{}'.format(MEMES_PATH, filename) for filename in os.listdir(MEMES_PATH) if not filename.endswith('.csv')]
+react_list = ['{}/{}'.format(REACTIONS_PATH, filename) for filename in os.listdir(REACTIONS_PATH)]
+hottakes_list = ['{}/{}'.format(HOT_TAKES_PATH, filename) for filename in os.listdir(HOT_TAKES_PATH)]
+win_slips = WIN_SLIPS_PATH
 
 class CustomerHelpCommand(commands.HelpCommand):
     def __init__(self):
@@ -24,9 +29,7 @@ class CustomerHelpCommand(commands.HelpCommand):
 
         
 chug_counter = 0
-meme_list = pd.read_csv('Resources/meme_repository.csv')
-react_list = pd.read_csv('Resources/react_repository.csv')
-takes_list = pd.read_csv('Resources/takes_repository.csv')
+
 load_dotenv()
 bot = commands.Bot(command_prefix='!', intents=discord.Intents(messages=True, message_content=True, guilds=True, members=True), help_command=CustomerHelpCommand())
 client = discord.Client(intents=discord.Intents(messages=True, message_content=True, guilds=True, members=True))
@@ -44,21 +47,12 @@ async def on_ready():
 async def memes(ctx):
     return_statements=['One hot and fresh meme incoming', 'Poggers', "Don't blame me if it's bad blame Corey", 'Ayyyy lmao', 'Get a look at this guy trying to laugh']
     return_statement= return_statements[random.randint(0,(len(return_statements) -1))]
-    single_meme = meme_list.sample().reset_index(drop=True)
-    filepath = single_meme['Filepath'].values[0]
-    await ctx.send(return_statement, file=discord.File(filepath))
-
-@bot.command(name='hottake', help='This calls a sizzling hot take')
-async def memes(ctx):
-    return_statements=['This is sure to start a discussion', 'God how insightful', "#GetHimAMuzzle", 'This move has upper-middle management written all over it', 'Wise Richard.jpg', 'More like Damndrew Dunn amirite?']
-    return_statement= return_statements[random.randint(0,(len(return_statements) -1))]
-    single_take = takes_list.sample().reset_index(drop=True)
-    filepath = single_take['Filepath'].values[0]
+    filepath = random.choice(meme_list)
     await ctx.send(return_statement, file=discord.File(filepath))
 
 @bot.command(name='add_quote', help='This will allow you to interact with me to make a quote in our list')
 async def add_quote(ctx):
-    all_quote_df = pd.read_csv('Resources/quote_df.csv')
+    all_quote_df = pd.read_csv(QUOTES_PATH)
     all_quote_df = all_quote_df.drop((all_quote_df.columns[0]), axis=1).reset_index(drop=True)
     i = 0
     await ctx.send('Who said the quote?')
@@ -89,11 +83,11 @@ async def add_quote(ctx):
     print(quote_df)
     all_quote_df= pd.concat([all_quote_df, quote_df], ignore_index=True)
     print(all_quote_df)
-    all_quote_df.to_csv('Resources/quote_df.csv')
+    all_quote_df.to_csv(QUOTES_PATH)
 
 @bot.command(name='quote_this', help='This will add what you replied to as a quote')
 async def quote_this(ctx):
-    all_quote_df = pd.read_csv('Resources/quote_df.csv')
+    all_quote_df = pd.read_csv(QUOTES_PATH)
     all_quote_df = all_quote_df.drop((all_quote_df.columns[0]), axis=1).reset_index(drop=True)
     text = await ctx.channel.fetch_message(ctx.message.reference.message_id)
     name = text.author.name
@@ -111,12 +105,12 @@ async def quote_this(ctx):
     quote_df.columns = quote_df.iloc[0]
     quote_df = quote_df.drop(quote_df.index[0]).reset_index(drop=True)
     all_quote_df= pd.concat([all_quote_df, quote_df], ignore_index=True)
-    all_quote_df.to_csv('Resources/quote_df.csv')
+    all_quote_df.to_csv(QUOTES_PATH)
 
 
 @bot.command(name='quote', help='This will call a random quote')
 async def get_quote(ctx):
-    quote_df = pd.read_csv('Resources/quote_df.csv')
+    quote_df = pd.read_csv(QUOTES_PATH)
     quote_row = quote_df.sample().reset_index(drop=True)
     name = quote_row['Name'][0]
     quote = quote_row['Quote'][0]
@@ -128,7 +122,7 @@ async def get_quote(ctx):
 
 @bot.command(name='quote_by', help='This will get a quote from a specific author')
 async def get_quoteby(ctx, name):
-    quote_df = pd.read_csv('Resources/quote_df.csv')
+    quote_df = pd.read_csv(QUOTES_PATH)
     filter = name
     filtered = quote_df.loc[quote_df['Name'].str.contains(filter)]
     filtered_row = filtered.sample().reset_index(drop=True)
@@ -138,7 +132,7 @@ async def get_quoteby(ctx, name):
 
 @bot.command(name='quote_with', help='This will call a quote containing the word(s) invoked')
 async def get_quotewith(ctx, fragment):
-    quote_df = pd.read_csv('Resources/quote_df.csv')
+    quote_df = pd.read_csv(QUOTES_PATH)
     filter = fragment
     filtered = quote_df.loc[quote_df['Quote'].str.contains(filter)]
     filtered_row = filtered.sample().reset_index(drop=True)
@@ -180,8 +174,7 @@ async def win(ctx):
 @bot.command(name='react', help='tells you how to feel about something')
 async def react(ctx):
     author = ctx.message.author.name
-    single_react = react_list.sample().reset_index(drop=True)
-    filepath = single_react['Filepath'].values[0]
+    filepath = random.choice(react_list)
     phrases = ['happy', 'sad', 'lazy', 'hopeless', 'miserable', 'full of ennui', 'despair', 'joy', 'ligma', 'testy', 'frustrated', 'horny', 'violent', 'mopey', 'sprightly']
     feeling = phrases[random.randint(0,(len(phrases)-1))]
     await ctx.send(f'{author} you should feel {feeling} clearly as shown here:', file=discord.File(filepath))
@@ -264,6 +257,13 @@ async def ffxiv(ctx):
         name = text.author.name
         pasta = 'The critically acclaimed MMORPG Final Fantasy XIV? With an expanded free trial which you can play through the entirety of A Realm Reborn and the award winning Heavensward expansion up to level 60 for free with no restrictions on playtime'    
         await ctx.send(f'{name} are you referring to {pasta}?')
+
+@bot.command(name='hottake', help='This calls a sizzling hot take')
+async def hottakes(ctx):
+    return_statements=['This is sure to start a discussion', 'God how insightful', "#GetHimAMuzzle", 'This move has upper-middle management written all over it', 'Wise Richard.jpg', 'More like Damndrew Dunn amirite?']
+    return_statement= return_statements[random.randint(0,(len(return_statements) -1))]
+    filepath = random.choice(hottakes_list)
+    await ctx.send(return_statement, file=discord.File(filepath))
 # @bot.event
 # async def on_message(message):
 #     if message.author.bot:

@@ -8,5 +8,4 @@ aiohttp
 bs4
 requests
 asyncio
-regex (re)
-os
+regex
