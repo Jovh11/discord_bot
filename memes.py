@@ -269,7 +269,7 @@ async def hottakes(ctx):
 async def eight(ctx):
     if ctx.message.author.bot:
         return
-    await ctx.send('Who said the quote?')
+    await ctx.send('What is your query mortal?')
     def check(msg):
         return msg.author == ctx.author and msg.channel == ctx.channel
     quest_msg = await bot.wait_for('message', check=check)
