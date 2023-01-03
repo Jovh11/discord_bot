@@ -264,6 +264,30 @@ async def hottakes(ctx):
     return_statement= return_statements[random.randint(0,(len(return_statements) -1))]
     filepath = random.choice(hottakes_list)
     await ctx.send(return_statement, file=discord.File(filepath))
+
+@bot.command(name='8ball', help='This will answer your question')
+async def eight(ctx):
+    if ctx.message.author.bot:
+        return
+    if ctx.message.reference is not None:
+        text = ctx.message.content
+        name = text.author.name
+        text_list = text.split('!8ball ')
+        text_parsed = text_list[1]
+        responses = ['It is certain.', 'It is decidedly so.', 'Without a doubt.', 'Yes definitely.', 'You may rely on it.', 'As I see it, yes.', 'Most likely.', 'Outlook good.', 'Yes.', 'Signs point to yes.', 'Reply hazy try again.', 'Ask again later.', 'Better not tell you now.', 'Cannot predict now.', 'Concentrate and ask again.', "Don't count on it.", 'My reply is no.', 'My sources say no.', 'Outlook not so good.', 'Very doubtful.']
+        love_response = "rub Dunn's stomach and ask again and all shall be revealed."
+        ign_response = 'My sources say that consulting ign is a mistake.'
+        ryan_response = 'Ryan is always right.'
+        if text_parsed.contains('love'):
+            await ctx.send(f'{name} my prediction is that you should {love_response}')
+        elif text_parsed.contains(' ign '):
+            await ctx.send(f'{name} {ign_response}')
+        elif text_parsed.contains('Ryan'):
+            await ctx.send(f'{name} the greatest truth of this world is {ryan_response}')
+        else:
+            response = responses[random.randint(0,(len(responses) -1))]
+            await ctx.send(f'{name} the answer to your burning query is {response}')
+
 # @bot.event
 # async def on_message(message):
 #     if message.author.bot:
