@@ -275,15 +275,15 @@ async def eight(ctx):
     quest_msg = await bot.wait_for('message', check=check)
     question = quest_msg.content
     name = quest_msg.author.name
-    responses = ['It is certain.', 'It is decidedly so.', 'Without a doubt.', 'Yes definitely.', 'You may rely on it.', 'As I see it, yes.', 'Most likely.', 'Outlook good.', 'Yes.', 'Signs point to yes.', 'Reply hazy try again.', 'Ask again later.', 'Better not tell you now.', 'Cannot predict now.', 'Concentrate and ask again.', "Don't count on it.", 'My reply is no.', 'My sources say no.', 'Outlook not so good.', 'Very doubtful.']
+    responses = ['it is certain.', 'it is decidedly so.', 'without a doubt.', 'yes definitely.', 'you may rely on it.', 'as I see it, yes.', 'most likely.', 'outlook good.', 'yes.', 'signs point to yes.', 'reply hazy try again.', 'ask again later.', 'better not tell you now.', 'cannot predict now.', 'concentrate and ask again.', "don't count on it.", 'my reply is no.', 'my sources say no.', 'outlook not so good.', 'very doubtful.']
     love_response = "rub Dunn's stomach and ask again and all shall be revealed."
     ign_response = 'My sources say that consulting ign is a mistake.'
     ryan_response = 'Ryan is always right.'
-    if question.contains('love'):
+    if 'love' in question.lower():
         await ctx.send(f'{name} my prediction is that you should {love_response}')
-    elif question.contains(' ign '):
+    elif ' ign ' in question.lower():
         await ctx.send(f'{name} {ign_response}')
-    elif question.contains('Ryan'):
+    elif 'Ryan' in question.lower():
         await ctx.send(f'{name} the greatest truth of this world is {ryan_response}')
     else:
         response = responses[random.randint(0,(len(responses) -1))]
