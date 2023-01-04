@@ -283,7 +283,7 @@ async def eight(ctx):
         await ctx.send(f'{name} my prediction is that you should {love_response}')
     elif ' ign ' in question.lower():
         await ctx.send(f'{name} {ign_response}')
-    elif 'Ryan' in question.lower():
+    elif 'ryan' in question.lower():
         await ctx.send(f'{name} the greatest truth of this world is {ryan_response}')
     else:
         response = responses[random.randint(0,(len(responses) -1))]
