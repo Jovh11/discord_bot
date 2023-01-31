@@ -289,6 +289,22 @@ async def eight(ctx):
         response = responses[random.randint(0,(len(responses) -1))]
         await ctx.send(f'{name} the answer to your burning query is {response}')
     
+@bot.command(name='score', help='This gives you your gamerscore')
+async def ffxiv(ctx):
+    if ctx.message.author.bot:
+        return
+    if ctx.message.reference is not None:
+        text = await ctx.channel.fetch_message(ctx.message.reference.message_id)
+        name = text.author.name
+        no_spaces = name.replace(' ', '')
+        new_name = text.author.discriminator
+        combined = no_spaces+'#'+new_name
+        point_df = pd.read_csv('Points.csv', index_col=[0])
+        points = point_df.loc[combined][0]
+        points = points + 1
+        point_df.loc[combined][0] = points
+        point_df.to_csv('Points.csv')
+        await ctx.send(f'{name} you have a total of {points} gamerscore. That is pretty poggers if I do say so myself')
 
 # @bot.event
 # async def on_message(message):
