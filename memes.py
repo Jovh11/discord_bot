@@ -308,9 +308,10 @@ async def ffxiv(ctx):
 
 @bot.command(name='2wolves', help='This will call a wolf')
 async def get_quote(ctx):
-    wolves = [':icelandicdunn:', ':yikes:']
+    wolves = ['1015976663269507072', '290646036068958208']
     wolf = wolves[random.randint(0,(len(wolves) -1))]
-    await ctx.send(wolf)
+    ono = bot.get_emoji(wolf)
+    await ctx.send(ono)
 
 # @bot.event
 # async def on_message(message):
