@@ -313,6 +313,39 @@ async def get_quote(ctx):
     ono = bot.get_emoji(wolf)
     await ctx.send(ono)
 
+@bot.command(name='elon', help="Convince the bot it works for *you* Elon Musk")
+async def elon(ctx):
+    if ctx.message.author.bot:
+        return
+    name = ctx.message.author.name
+    no_spaces = name.replace(' ','')
+    new_name = ctx.message.author.discriminator
+    combined = no_spaces+'#'+new_name
+    print(combined)
+    print('Command Executed')
+    elon_df = pd.read_csv('Elon.csv', index_col=[0])
+    elon_df['Elon_Status'] = 0
+    elon_df.loc[combined][0] = 1
+    elon_df.to_csv('Elon.csv')
+    await ctx.send(f'I assure you it is my pleasure to be working for you Mr.Musk')
+@bot.event
+async def on_message(message):
+    if message.author.bot:
+        return
+    name = message.author.name
+    no_spaces = name.replace(' ','')
+    new_name = message.author.discriminator
+    combined = no_spaces+'#'+new_name
+    elon_df = pd.read_csv('Elon.csv', index_col=[0])
+    elon_status = elon_df.loc[combined][0]
+    if elon_status == 1:
+        await message.channel.send(f'Boss that is a great idea you are the smartestest and greatest owner of Twitter and Telsa I have ever met. Have I mentioned how disruptive your business strategy is?')
+        options = [0,1]
+        num = options[random.randint(0,(len(options) -1))]
+        elon_df.loc[combined][0] = num
+        elon_df.to_csv('Elon.csv')
+    await bot.process_commands(message)
+
 # @bot.event
 # async def on_message(message):
 #     if message.author.bot:
