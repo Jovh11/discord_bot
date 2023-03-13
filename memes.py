@@ -346,6 +346,20 @@ async def on_message(message):
         elon_df.to_csv('Elon.csv')
     await bot.process_commands(message)
 
+@bot.command(name='elon-ball', help='This will answer your question but you hold his paycheck and or family hostage')
+async def eight(ctx):
+    if ctx.message.author.bot:
+        return
+    await ctx.send('What is your query mortal?')
+    def check(msg):
+        return msg.author == ctx.author and msg.channel == ctx.channel
+    quest_msg = await bot.wait_for('message', check=check)
+    question = quest_msg.content
+    name = quest_msg.author.name
+    responses = ['You got it in one sir', 'You are so right it is almost painful', 'Please let my famil- I mean naturally sir']
+    response = responses[random.randint(0,(len(responses) -1))]
+    await ctx.send(f'{response}')
+
 # @bot.event
 # async def on_message(message):
 #     if message.author.bot:
