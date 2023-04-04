@@ -318,7 +318,7 @@ async def ffxiv(ctx):
         point_df.to_csv('Points.csv')
         await ctx.send(f'{name} you have a total of {points} gamerscore. That is pretty poggers if I do say so myself')
 
-@bot.command(name='2wolves', help='This will call a wolf')
+@bot.command(name='2wolves', help='This will call a wolf \n')
 async def get_quote(ctx):
     wolves = ['1015976663269507072', '290646036068958208']
     wolf = wolves[random.randint(0,(len(wolves) -1))]
