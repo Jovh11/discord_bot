@@ -20,6 +20,7 @@ react_list = ['{}/{}'.format(REACTIONS_PATH, filename) for filename in os.listdi
 hottakes_list = ['{}/{}'.format(HOT_TAKES_PATH, filename) for filename in os.listdir(HOT_TAKES_PATH)]
 win_slips = WIN_SLIPS_PATH
 dog_list = ['{}/{}'.format(DOG_PATH, filename) for filename in os.listdir(DOG_PATH)]
+cat_list = ['{}/{}'.format(CAT_PATH, filename) for filename in os.listdir(DOG_PATH) if not filename.endswith('.csv')]
 wowbow = 0
 
 class CustomerHelpCommand(commands.HelpCommand):
@@ -386,6 +387,77 @@ async def dog(ctx):
     filepath = random.choice(dog_list)
     await ctx.send(return_statement, file=discord.File(filepath))
     
+@bot.command(name='catgonit', help='Caturday Came Early \n')
+async def dog(ctx):
+    if ctx.message.author.bot:
+        return
+    ctx.send("Behold a feline")
+    filepath = random.choice(cat_list)
+    await ctx.send(file=discord.File(filepath))
+
+
+@bot.command(name="add_dog", help='Insert a Doggo Picture \n')
+async def woofer(ctx):
+    if ctx.message.author.bot:
+        return
+    await ctx.send('Please reply with a dog picture(s)')
+    def check(msg):
+        return msg.author == ctx.author and msg.channel == ctx.channel    
+    image_msg = await bot.wait_for('message', check=check)
+    image = image_msg.attachments
+    print(image)
+    for attachment in image:
+        if valid_image_url(attachment.url):
+            await attachment.save(os.path.join(f"{DOG_PATH}", attachment.filename))
+    await ctx.send('Added Friend')
+
+@bot.command(name="add_meme", help="Add a Meme \n")
+async def memeadd(ctx):
+    if ctx.message.author.bot:
+        return
+    await ctx.send('Please reply with a meme if you challenge my supremacy lesser memelord')
+    def check(msg):
+        return msg.author == ctx.author and msg.channel == ctx.channel    
+    image_msg = await bot.wait_for('message', check=check)
+    image = image_msg.attachments
+    print(image)
+    for attachment in image:
+        if valid_image_url(attachment.url):
+            await attachment.save(os.path.join(f"{MEME_PATH}", attachment.filename))
+    await ctx.send('Added coward')
+
+@bot.command(name="add_cat", help="Add a cat picture \n")
+async def catadd(ctx):
+    if ctx.message.author.bot:
+        return
+    await ctx.send('Please reply with a lesser beast')
+    def check(msg):
+        return msg.author == ctx.author and msg.channel == ctx.channel    
+    image_msg = await bot.wait_for('message', check=check)
+    image = image_msg.attachments
+    print(image)
+    for attachment in image:
+        if valid_image_url(attachment.url):
+            await attachment.save(os.path.join(f"{CAT_PATH}", attachment.filename))
+    await ctx.send('Added cat lover')
+
+def valid_image_url(url: str):
+    image_extensions = ['png', 'jpg', 'jpeg', 'gif']
+    for image_extension in image_extensions:
+        if url.endswith('.' + image_extension):
+            return True
+    return False
+
+
+async def download_image(url: str, images_path: str = ""):
+    async with aiohttp.ClientSession() as session:
+        async with session.get(url) as resp:
+            if resp.status == 200:
+                image_name = os.path.basename(url)
+                with open(os.path.join(images_path, image_name), "wb") as f:
+                    f.write(await resp.read())
+
+
 
 # @bot.event
 # async def on_message(message):
