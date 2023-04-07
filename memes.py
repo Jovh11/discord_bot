@@ -19,7 +19,7 @@ meme_list = ['{}/{}'.format(MEMES_PATH, filename) for filename in os.listdir(MEM
 react_list = ['{}/{}'.format(REACTIONS_PATH, filename) for filename in os.listdir(REACTIONS_PATH)]
 hottakes_list = ['{}/{}'.format(HOT_TAKES_PATH, filename) for filename in os.listdir(HOT_TAKES_PATH)]
 win_slips = WIN_SLIPS_PATH
-dog_list = ['{}{}'.format(RESOURCES_PATH, filename) for filename in os.listdir(DOG_PATH)]
+dog_list = ['{}{}'.format(DOG_PATH, filename) for filename in os.listdir(DOG_PATH)]
 wowbow = 0
 
 class CustomerHelpCommand(commands.HelpCommand):
