@@ -321,10 +321,9 @@ async def ffxiv(ctx):
 
 @bot.command(name='2wolves', help='This will call a wolf \n')
 async def get_quote(ctx):
-    wolves = ['1015976663269507072', '290646036068958208']
+    wolves = ['<:icelandicdunn:1007270960136728627>', '<:wiserichard:1007266810481090671>']
     wolf = wolves[random.randint(0,(len(wolves) -1))]
-    ono = bot.get_emoji(wolf)
-    await ctx.send(ono)
+    await ctx.send(wolf)
 
 @bot.command(name='elon', help="Convince the bot it works for *you* Elon Musk \n")
 async def elon(ctx):
@@ -341,6 +340,7 @@ async def elon(ctx):
     elon_df.loc[combined][0] = 1
     elon_df.to_csv(ELON_PATH)
     await ctx.send(f'I assure you it is my pleasure to be working for you Mr.Musk')
+
 @bot.event
 async def on_message(message):
     if message.author.bot:
@@ -415,7 +415,7 @@ async def woofer(ctx):
 async def memeadd(ctx):
     if ctx.message.author.bot:
         return
-    await ctx.send('Please reply with a meme if you challenge my supremacy lesser memelord')
+    await ctx.send('Please reply with a meme if you trying to challenge my supremacy lesser memelord')
     def check(msg):
         return msg.author == ctx.author and msg.channel == ctx.channel    
     image_msg = await bot.wait_for('message', check=check)
