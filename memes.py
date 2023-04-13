@@ -303,7 +303,7 @@ async def eight(ctx):
         await ctx.send(f'{name} the answer to your burning query is {response}')
     
 @bot.command(name='score', help='This gives you your gamerscore \n')
-async def ffxiv(ctx):
+async def score(ctx):
     if ctx.message.author.bot:
         return
     if ctx.message.reference is not None:
@@ -318,6 +318,8 @@ async def ffxiv(ctx):
         point_df.loc[combined][0] = points
         point_df.to_csv('Points.csv')
         await ctx.send(f'{name} you have a total of {points} gamerscore. That is pretty poggers if I do say so myself')
+
+
 
 @bot.command(name='2wolves', help='This will call a wolf \n')
 async def get_quote(ctx):
