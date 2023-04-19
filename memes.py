@@ -15,12 +15,12 @@ import scrape_google_images
 import re
 from constants import *
 
-meme_list = ['{}/{}'.format(MEMES_PATH, filename) for filename in os.listdir(MEMES_PATH) if not filename.endswith('.csv')]
+# meme_list = ['{}/{}'.format(MEMES_PATH, filename) for filename in os.listdir(MEMES_PATH) if not filename.endswith('.csv')]
 react_list = ['{}/{}'.format(REACTIONS_PATH, filename) for filename in os.listdir(REACTIONS_PATH)]
 hottakes_list = ['{}/{}'.format(HOT_TAKES_PATH, filename) for filename in os.listdir(HOT_TAKES_PATH)]
 win_slips = WIN_SLIPS_PATH
-dog_list = ['{}/{}'.format(DOG_PATH, filename) for filename in os.listdir(DOG_PATH)]
-cat_list = ['{}/{}'.format(CAT_PATH, filename) for filename in os.listdir(DOG_PATH) if not filename.endswith('.csv')]
+# dog_list = ['{}/{}'.format(DOG_PATH, filename) for filename in os.listdir(DOG_PATH)]
+# cat_list = ['{}/{}'.format(CAT_PATH, filename) for filename in os.listdir(DOG_PATH) if not filename.endswith('.csv')]
 wowbow = 0
 
 class CustomerHelpCommand(commands.HelpCommand):
@@ -58,6 +58,7 @@ async def on_ready():
 
 @bot.command(name='meme', help='This calls a random meme from the collection \n')
 async def memes(ctx):
+    meme_list = ['{}/{}'.format(MEMES_PATH, filename) for filename in os.listdir(MEMES_PATH) if not filename.endswith('.csv')]
     return_statements=['One hot and fresh meme incoming', 'Poggers', "Don't blame me if it's bad blame Corey", 'Ayyyy lmao', 'Get a look at this guy trying to laugh']
     return_statement= return_statements[random.randint(0,(len(return_statements) -1))]
     filepath = random.choice(meme_list)
@@ -377,6 +378,7 @@ async def eight(ctx):
 
 @bot.command(name='doggonit', help='Bow WoW \n')
 async def dog(ctx):
+    dog_list = ['{}/{}'.format(DOG_PATH, filename) for filename in os.listdir(DOG_PATH)]
     if ctx.message.author.bot:
         return
     global wowbow
@@ -390,7 +392,8 @@ async def dog(ctx):
     await ctx.send(return_statement, file=discord.File(filepath))
     
 @bot.command(name='catgonit', help='Caturday Came Early \n')
-async def dog(ctx):
+async def cat(ctx):
+    cat_list = ['{}/{}'.format(CAT_PATH, filename) for filename in os.listdir(CAT_PATH) if not filename.endswith('.csv')]
     if ctx.message.author.bot:
         return
     ctx.send("Behold a feline")
@@ -423,7 +426,7 @@ async def memeadd(ctx):
     image = image_msg.attachments
     for attachment in image:
         if valid_image_url(attachment.url):
-            await attachment.save(os.path.join(f"{MEME_PATH}", attachment.filename))
+            await attachment.save(os.path.join(f"{MEMES_PATH}", attachment.filename))
     await ctx.send('Added coward')
 
 @bot.command(name="add_cat", help="Add a cat picture \n")
