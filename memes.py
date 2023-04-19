@@ -17,7 +17,7 @@ from constants import *
 
 # meme_list = ['{}/{}'.format(MEMES_PATH, filename) for filename in os.listdir(MEMES_PATH) if not filename.endswith('.csv')]
 react_list = ['{}/{}'.format(REACTIONS_PATH, filename) for filename in os.listdir(REACTIONS_PATH)]
-hottakes_list = ['{}/{}'.format(HOT_TAKES_PATH, filename) for filename in os.listdir(HOT_TAKES_PATH)]
+# hottakes_list = ['{}/{}'.format(HOT_TAKES_PATH, filename) for filename in os.listdir(HOT_TAKES_PATH)]
 win_slips = WIN_SLIPS_PATH
 # dog_list = ['{}/{}'.format(DOG_PATH, filename) for filename in os.listdir(DOG_PATH)]
 # cat_list = ['{}/{}'.format(CAT_PATH, filename) for filename in os.listdir(DOG_PATH) if not filename.endswith('.csv')]
@@ -274,6 +274,7 @@ async def ffxiv(ctx):
 
 @bot.command(name='hottake', help='This calls a sizzling hot take \n')
 async def hottakes(ctx):
+    hottakes_list = ['{}/{}'.format(HOT_TAKES_PATH, filename) for filename in os.listdir(HOT_TAKES_PATH)]
     return_statements=['This is sure to start a discussion', 'God how insightful', "#GetHimAMuzzle", 'This move has upper-middle management written all over it', 'Wise Richard.jpg', 'More like Damndrew Dunn amirite?']
     return_statement= return_statements[random.randint(0,(len(return_statements) -1))]
     filepath = random.choice(hottakes_list)
@@ -450,15 +451,19 @@ def valid_image_url(url: str):
             return True
     return False
 
-
-async def download_image(url: str, images_path: str = ""):
-    async with aiohttp.ClientSession() as session:
-        async with session.get(url) as resp:
-            if resp.status == 200:
-                image_name = os.path.basename(url)
-                with open(os.path.join(images_path, image_name), "wb") as f:
-                    f.write(await resp.read())
-
+@bot.command(name="add_take", help="Showcase that homegrown spice")
+async def takeadd(ctx):
+    if ctx.message.author.bot:
+        return
+    await ctx.send("Please reply with a spicy take")
+    def check(msg):
+        return msg.author == ctx.author and msg.channel == ctx.channel
+    image_msg = await bot.wait_for('message', check=check)
+    image = image_msg.attachments
+    for attachment in image:
+        if valid_image_url(attachment.url):
+            await attachment.save(os.path.join(f"{HOT_TAKES_PATH}", attachment.filename))
+    await ctx.send("Added the heat about dat boy")
 
 
 # @bot.event
