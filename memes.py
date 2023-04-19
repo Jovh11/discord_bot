@@ -407,7 +407,6 @@ async def woofer(ctx):
         return msg.author == ctx.author and msg.channel == ctx.channel    
     image_msg = await bot.wait_for('message', check=check)
     image = image_msg.attachments
-    print(image)
     for attachment in image:
         if valid_image_url(attachment.url):
             await attachment.save(os.path.join(f"{DOG_PATH}", attachment.filename))
@@ -422,7 +421,6 @@ async def memeadd(ctx):
         return msg.author == ctx.author and msg.channel == ctx.channel    
     image_msg = await bot.wait_for('message', check=check)
     image = image_msg.attachments
-    print(image)
     for attachment in image:
         if valid_image_url(attachment.url):
             await attachment.save(os.path.join(f"{MEME_PATH}", attachment.filename))
@@ -437,7 +435,6 @@ async def catadd(ctx):
         return msg.author == ctx.author and msg.channel == ctx.channel    
     image_msg = await bot.wait_for('message', check=check)
     image = image_msg.attachments
-    print(image)
     for attachment in image:
         if valid_image_url(attachment.url):
             await attachment.save(os.path.join(f"{CAT_PATH}", attachment.filename))
