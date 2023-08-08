@@ -465,6 +465,73 @@ async def takeadd(ctx):
             await attachment.save(os.path.join(f"{HOT_TAKES_PATH}", attachment.filename))
     await ctx.send("Added the heat about dat boy")
 
+@bot.command(name="topic", help="Help move the conversation along")
+async def topic(ctx):
+    food = ["Pancakes", "Waffles", "French Toast", "Pineapple Pizza", "Fruit (unripened)", "Fruit (ripened)", "Brussel Sprouts", "Vegemite Sandwich (Man from Brussels edition)", 
+            "Apple Pie", "Pears", "Saltines", "Rice"]
+    
+    games = ["God of War Ragnarok", "God of War", "Elden Ring", "Sid Meier's Civilization V", "Age of Wonders 4", "Warhammer 40000: Darktide", "Fortnite", "Apex Legends",
+             "Critically Acclaimed MMORPG Final Fantasy XIV Now Free Through Heavensword", "Allods", "Diablo IV", "Checkers"]
+    
+    shows = ["Game of Thrones", "One Piece", "Naruto Shippuden", "Chairham Anime", "Quints", "Gundam: Iron Blooded Orphans", "Gundam: The Witch from Mercury", "Mushoku Tensei",
+             "The Office", "Parks and Recreation", "Ridiculousness", "The Jeselnik Offensive", "Late Night with Jimmy Fallon", "Family Feud", "The Price is Right"]
+    
+    miscellany = ["Magic: The Gathering", "Snorehammer 40K", "Cats", "Dogs", "Specifically Pepsi products", "The Big Bang Theory Laughtrack", "Formula One Racing",
+                  "Bad TV", "Good Books", "Dune", "Avenging their clan"]
+    
+    def apples_to_apples(lst, name):
+        size = len(lst)
+        loc = random.randint(0, size -1)
+        loc2 = random.randint(0, size -1)
+        if loc == loc2:
+            loc2 = random.randint(0, size -1)
+        else:
+            output_str = f"My powerful wizard orb has determined that {lst[loc]} is better than {lst[loc2]}. {name.mention} what do you think?"
+        return output_str
+
+    def apples_to_oranges(lst, lst2, name):
+        size1 = len(lst)
+        size2 = len(lst2)
+        loc = random.randint(0, size1 -1)
+        loc2 = random.randint(0, size2 -1)
+        modifier = ["hate", "secretly love", "pretend to like", "love almost romantically", "want to lick", "never stop talking about"]
+        loc3 = random.randint(0, len(modifier) -1)
+        output_str = f"My secret scrying techniques (patent pending) has shown me that people who like {lst[loc]} often {modifier[loc3]} {lst2[loc2]} what do you think {name.mention}?"
+        return output_str
+    
+    def get_name():
+        df = pd.read_csv("Resources/server.csv", index_col=[0])
+        server = df["server"][0]
+        id1 = server["id1"][0]
+        id2 = server["id2"][0]
+        guild = bot.get_guild(server)
+        namelst = guild.members
+        names = []
+        for name in namelst:
+            if name.id != id1 or id2:
+                names.append(name)
+        namelen = len(names)
+        loc = random.randint(0, namelen -1)
+        name = names[loc]
+        return name
+
+    topics = [food, games, shows, miscellany]
+    prompt = random.randint(0,1)
+    name = get_name()
+    if prompt == 0:
+        topicnum = random.randint(0, len(topics) -1)
+        topic = topics[topicnum]
+        output = apples_to_apples(topic, name)
+        await ctx.send(output)
+    elif prompt == 1:
+        topicnum1 = random.randint(0, len(topics) -1)
+        topicnum2 = random.randint(0, len(topics) -1)
+        if topicnum1 == topicnum2:
+            topicnum2 = random.randint(0, len(topics) -1)
+        topic = topics[topicnum1]
+        topic2 = topics[topicnum2]
+        output = apples_to_oranges(topic, topic2, name)
+        await ctx.send(output)
 
 # @bot.event
 # async def on_message(message):
