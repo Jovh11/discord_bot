@@ -349,18 +349,23 @@ async def elon(ctx):
 async def on_message(message):
     if message.author.bot:
         return
-    name = message.author.name
-    no_spaces = name.replace(' ','')
-    new_name = message.author.discriminator
-    combined = no_spaces+'#'+new_name
-    elon_df = pd.read_csv(ELON_PATH, index_col=[0])
-    elon_status = elon_df.loc[combined][0]
-    if elon_status == 1:
-        await message.channel.send(f'Boss that is a great idea you are the smartestest and greatest owner of Twitter and Telsa I have ever met. Have I mentioned how disruptive your business strategy is?')
-        options = [0,1]
-        num = options[random.randint(0,(len(options) -1))]
-        elon_df.loc[combined][0] = num
-        elon_df.to_csv(ELON_PATH)
+    
+    ## TODO: Fix Elon Command Username storage to be dynamic & remove try/except
+    try:
+        name = message.author.name
+        no_spaces = name.replace(' ','')
+        new_name = message.author.discriminator
+        combined = no_spaces+'#'+new_name
+        elon_df = pd.read_csv(ELON_PATH, index_col=[0])
+        elon_status = elon_df.loc[combined][0]
+        if elon_status == 1:
+            await message.channel.send(f'Boss that is a great idea you are the smartestest and greatest owner of Twitter and Telsa I have ever met. Have I mentioned how disruptive your business strategy is?')
+            options = [0,1]
+            num = options[random.randint(0,(len(options) -1))]
+            elon_df.loc[combined][0] = num
+            elon_df.to_csv(ELON_PATH)
+    except:
+        pass
     await bot.process_commands(message)
 
 @bot.command(name='elon-ball', help='This will answer your question but you hold his paycheck and or family hostage \n')
@@ -500,10 +505,10 @@ async def topic(ctx):
         return output_str
     
     def get_name():
-        df = pd.read_csv("Resources/server.csv", index_col=[0])
-        server = df["server"][0]
-        id1 = server["id1"][0]
-        id2 = server["id2"][0]
+        df = pd.read_csv(SERVER_TOPICS_PATH, index_col=[0])
+        server = df["Server"][0]
+        id1 = df["id1"][0]
+        id2 = df["id2"][0]
         guild = bot.get_guild(server)
         namelst = guild.members
         names = []
@@ -532,28 +537,6 @@ async def topic(ctx):
         topic2 = topics[topicnum2]
         output = apples_to_oranges(topic, topic2, name)
         await ctx.send(output)
-
-# @bot.event
-# async def on_message(message):
-#     if message.author.bot:
-#         return
-#     # Corey's User ID
-#     if message.author.id == 685569047739236408 and not message.content.startswith("Oh beautiful bot"):
-#         await message.channel.send('meep')
-#     check = message.content.lower()
-#     regex = r"\bign|ign.com"
-#     if re.search(regex, check):
-#         if message.reference is None:
-#             async with aiohttp.ClientSession() as session:
-#                 link = scrape_google_images.get_random_image_link_from_google('ign memes')
-#                 async with session.get(link) as resp:
-#                     if resp.status != 200:
-#                         return await message.channel.send('Damn it Corey, you broke it')
-#                     data = io.BytesIO(await resp.read())
-#                     await message.channel.send(file=discord.File(data, link))
-#     await bot.process_commands(message)
-
-
 
 bot.run(token)
 
