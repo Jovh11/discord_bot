@@ -538,5 +538,23 @@ async def topic(ctx):
         output = apples_to_oranges(topic, topic2, name)
         await ctx.send(output)
 
+@bot.event
+async def on_message(message):
+    if message.author.bot:
+        return
+    msg = str(message.content)
+    check = "twitter.com"
+    check2 = "x.com"
+    check3 = "fxtwitter.com"
+    return_str = "before manipulation"
+    if check in msg or check2 in msg:
+        if check3 not in msg:
+            if check in msg:
+                return_str = msg.replace(check, "fxtwitter.com")
+            elif check2 in msg:
+                return_str = msg.replace(check2, "fxtwitter.com")
+            await message.channel.send(f'Hey did you mean to use {return_str} instead?')
+    await bot.process_commands(message)
+
 bot.run(token)
 
