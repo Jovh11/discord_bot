@@ -553,7 +553,7 @@ async def on_message(message):
                 return_str = msg.replace(check, "fxtwitter.com")
             elif check2 in msg:
                 return_str = msg.replace(check2, "fxtwitter.com")
-            await message.channel.send(f'Hey did you mean to use {return_str} instead?')
+            await message.channel.send(f'{return_str} FTFY')
     await bot.process_commands(message)
 
 bot.run(token)
