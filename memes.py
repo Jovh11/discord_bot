@@ -13,13 +13,21 @@ import io
 import aiohttp
 import scrape_google_images
 import re
-from constants import *
+# from constants import *
 
-# meme_list = ['{}/{}'.format(MEMES_PATH, filename) for filename in os.listdir(MEMES_PATH) if not filename.endswith('.csv')]
+MEMES_PATH = "X:\Pictures\Memes"
+REACTIONS_PATH = "X:\Pictures\Reactions"
+HOT_TAKES_PATH = "X:\Pictures\Recipts\All"
+WIN_SLIPS_PATH = "X:\Pictures\Reactions\win.jpg"
+DOG_PATH = "X:\Pictures\Dogs"
+QUOTES_PATH = r"C:\Users\rcrch\Documents\Git\discord_bot\quote_df.csv"
+SERVER_TOPICS_PATH = r"C:\Users\rcrch\Documents\Git\discord_bot\Resources\server.csv"
+# cat_path = ""
+meme_list = ['{}/{}'.format(MEMES_PATH, filename) for filename in os.listdir(MEMES_PATH) if not filename.endswith('.csv')]
 react_list = ['{}/{}'.format(REACTIONS_PATH, filename) for filename in os.listdir(REACTIONS_PATH)]
-# hottakes_list = ['{}/{}'.format(HOT_TAKES_PATH, filename) for filename in os.listdir(HOT_TAKES_PATH)]
+hottakes_list = ['{}/{}'.format(HOT_TAKES_PATH, filename) for filename in os.listdir(HOT_TAKES_PATH)]
 win_slips = WIN_SLIPS_PATH
-# dog_list = ['{}/{}'.format(DOG_PATH, filename) for filename in os.listdir(DOG_PATH)]
+dog_list = ['{}/{}'.format(DOG_PATH, filename) for filename in os.listdir(DOG_PATH)]
 # cat_list = ['{}/{}'.format(CAT_PATH, filename) for filename in os.listdir(DOG_PATH) if not filename.endswith('.csv')]
 wowbow = 0
 
@@ -76,6 +84,8 @@ async def add_quote(ctx):
     while i < 1:
         name_msg = await bot.wait_for('message', check=check)
         name = name_msg.content
+        if '@' in name and '@ ' not in name:
+            name = name.replace('@','@ ')
         await ctx.send(f'You said {name}')
         i+=1
     await ctx.send("What is the quote?")
