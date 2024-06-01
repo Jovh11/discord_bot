@@ -314,22 +314,25 @@ async def eight(ctx):
         response = responses[random.randint(0,(len(responses) -1))]
         await ctx.send(f'{name} the answer to your burning query is {response}')
     
-@bot.command(name='score', help='This gives you your gamerscore \n')
-async def score(ctx):
+@bot.command(name='score', help='This gives you your friend a gamerscore \n')
+async def score_count(ctx):
     if ctx.message.author.bot:
         return
-    if ctx.message.reference is not None:
+    reply_message_id = ctx.message.reference.message_id
+    reply_message = await ctx.fetch_message(reply_message_id)
+    reply_author = reply_message.author
+    if reply_author == ctx.message.author:
+        await ctx.send("Sorry you can't give yourself points")
+    if ctx.message.reference is not None and reply_author != ctx.message.author:
         text = await ctx.channel.fetch_message(ctx.message.reference.message_id)
         name = text.author.name
-        no_spaces = name.replace(' ', '')
-        new_name = text.author.discriminator
-        combined = no_spaces+'#'+new_name
+        name_id = text.author.id
         point_df = pd.read_csv('Points.csv', index_col=[0])
-        points = point_df.loc[combined][0]
-        points = points + 1
-        point_df.loc[combined][0] = points
+        points = point_df.loc[name_id]['Points']
+        points = int(points) + 1
+        point_df.at[name_id, "Points"] = points
         point_df.to_csv('Points.csv')
-        await ctx.send(f'{name} you have a total of {points} gamerscore. That is pretty poggers if I do say so myself')
+        await ctx.send(f"{name} you have {points} point(s). That is pretty poggers if I do say so myself.")
 
 
 
@@ -514,25 +517,16 @@ async def topic(ctx):
         output_str = f"My secret scrying techniques (patent pending) has shown me that people who like {lst[loc]} often {modifier[loc3]} {lst2[loc2]} what do you think {name.mention}?"
         return output_str
     
-    def get_name():
-        df = pd.read_csv(SERVER_TOPICS_PATH, index_col=[0])
-        server = df["Server"][0]
-        id1 = df["id1"][0]
-        id2 = df["id2"][0]
-        guild = bot.get_guild(server)
-        namelst = guild.members
-        names = []
-        for name in namelst:
-            if name.id != id1 or id2:
-                names.append(name)
-        namelen = len(names)
-        loc = random.randint(0, namelen -1)
-        name = names[loc]
-        return name
+    def get_id():
+        df = pd.read_csv("Topic.csv")
+        user_list = df['id'].values
+        user_id = user_list[random.randint(0,(len(user_list) - 1))]
+        return user_id
 
     topics = [food, games, shows, miscellany]
     prompt = random.randint(0,1)
-    name = get_name()
+    id = get_id()
+    name = await bot.fetch_user(id)
     if prompt == 0:
         topicnum = random.randint(0, len(topics) -1)
         topic = topics[topicnum]
@@ -548,23 +542,23 @@ async def topic(ctx):
         output = apples_to_oranges(topic, topic2, name)
         await ctx.send(output)
 
-@bot.event
-async def on_message(message):
-    if message.author.bot:
-        return
-    msg = str(message.content)
-    check = "twitter.com"
-    check2 = "x.com"
-    check3 = "fxtwitter.com"
-    return_str = "before manipulation"
-    if check in msg or check2 in msg:
-        if check3 not in msg:
-            if check in msg:
-                return_str = msg.replace(check, "fxtwitter.com")
-            elif check2 in msg:
-                return_str = msg.replace(check2, "fxtwitter.com")
-            await message.channel.send(f'{return_str} FTFY')
-    await bot.process_commands(message)
+# @bot.event
+# async def on_message(message):
+#     if message.author.bot:
+#         return
+#     msg = str(message.content)
+#     check = "twitter.com"
+#     check2 = "x.com"
+#     check3 = "fxtwitter.com"
+#     return_str = "before manipulation"
+#     if check in msg or check2 in msg:
+#         if check3 not in msg:
+#             if check in msg:
+#                 return_str = msg.replace(check, "fxtwitter.com")
+#             elif check2 in msg:
+#                 return_str = msg.replace(check2, "fxtwitter.com")
+#             await message.channel.send(f'{return_str} FTFY')
+#     await bot.process_commands(message)
 
 bot.run(token)
 
