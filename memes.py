@@ -314,8 +314,8 @@ async def eight(ctx):
         response = responses[random.randint(0,(len(responses) -1))]
         await ctx.send(f'{name} the answer to your burning query is {response}')
     
-@bot.command(name='score', help='This gives you your friend a gamerscore \n')
-async def score_count(ctx):
+@bot.command(name='give_score', help='This gives you your friend a gamerscore \n')
+async def score_give(ctx):
     if ctx.message.author.bot:
         return
     reply_message_id = ctx.message.reference.message_id
@@ -334,6 +334,15 @@ async def score_count(ctx):
         point_df.to_csv('Points.csv')
         await ctx.send(f"{name} you have {points} point(s). That is pretty poggers if I do say so myself.")
 
+@bot.command(name="score_count", help="This will give you your gamerscore \n")
+async def score_count(ctx):
+    if ctx.message.author.bot:
+        return
+    name = ctx.message.author.name
+    author = ctx.message.author.id
+    point_df = pd.read_csv("Points.csv", index_col=[0])
+    points  = point_df.loc[author]["Points"]
+    await ctx.send(f"{name} you have {points} point(s) may it be a light in dark times")
 
 
 @bot.command(name='2wolves', help='This will call a wolf \n')
