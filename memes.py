@@ -314,25 +314,25 @@ async def eight(ctx):
         response = responses[random.randint(0,(len(responses) -1))]
         await ctx.send(f'{name} the answer to your burning query is {response}')
     
-@bot.command(name='give_score', help='This gives you your friend a gamerscore \n')
-async def score_give(ctx):
-    if ctx.message.author.bot:
-        return
-    reply_message_id = ctx.message.reference.message_id
-    reply_message = await ctx.fetch_message(reply_message_id)
-    reply_author = reply_message.author
-    if reply_author == ctx.message.author:
-        await ctx.send("Sorry you can't give yourself points")
-    if ctx.message.reference is not None and reply_author != ctx.message.author:
-        text = await ctx.channel.fetch_message(ctx.message.reference.message_id)
-        name = text.author.name
-        name_id = text.author.id
-        point_df = pd.read_csv('Points.csv', index_col=[0])
-        points = point_df.loc[name_id]['Points']
-        points = int(points) + 1
-        point_df.at[name_id, "Points"] = points
-        point_df.to_csv('Points.csv')
-        await ctx.send(f"{name} you have {points} point(s). That is pretty poggers if I do say so myself.")
+# @bot.command(name='give_score', help='This gives you your friend a gamerscore \n')
+# async def score_give(ctx):
+#     if ctx.message.author.bot:
+#         return
+#     reply_message_id = ctx.message.reference.message_id
+#     reply_message = await ctx.fetch_message(reply_message_id)
+#     reply_author = reply_message.author
+#     if reply_author == ctx.message.author:
+#         await ctx.send("Sorry you can't give yourself points")
+#     if ctx.message.reference is not None and reply_author != ctx.message.author:
+#         text = await ctx.channel.fetch_message(ctx.message.reference.message_id)
+#         name = text.author.name
+#         name_id = text.author.id
+#         point_df = pd.read_csv('Points.csv', index_col=[0])
+#         points = point_df.loc[name_id]['Points']
+#         points = int(points) + 1
+#         point_df.at[name_id, "Points"] = points
+#         point_df.to_csv('Points.csv')
+#         await ctx.send(f"{name} you have {points} point(s). That is pretty poggers if I do say so myself.")
 
 @bot.command(name="score_count", help="This will give you your gamerscore \n")
 async def score_count(ctx):
@@ -550,6 +550,81 @@ async def topic(ctx):
         topic2 = topics[topicnum2]
         output = apples_to_oranges(topic, topic2, name)
         await ctx.send(output)
+
+@bot.event
+async def on_reaction_add(reaction, user):
+    if reaction.emoji.id == 1007263173361012927:
+        value = reaction.emoji.id
+        person = user.id
+        message_id = reaction.message.id
+        df = pd.read_csv("Reaction_Tracker.csv", index_col=[0])
+        refined_df = df[df['Message id'] == message_id]
+        users = refined_df['User id'].values
+        more_refined_df = refined_df[refined_df['User id'] == person]
+        emojis = more_refined_df['Reaction'].values
+        if person not in users:
+            together = {}
+            together['Message id'] = [message_id]
+            together['User id'] = [person]
+            together['Reaction'] = [value]
+            df2 = pd.DataFrame(together)
+            df = pd.concat([df,df2])
+            df.to_csv("Reaction_Tracker.csv")
+            point_df = pd.read_csv('Points.csv', index_col=[0])
+            points = point_df.loc[person]['Points']
+            points = int(points) + 1
+            point_df.at[person, "Points"] = points
+            point_df.to_csv('Points.csv')
+        elif 1007263173361012927 not in emojis:
+            together = {}
+            together['Message id'] = [message_id]
+            together['User id'] = [person]
+            together['Reaction'] = [value]
+            df2 = pd.DataFrame(together)
+            df = pd.concat([df,df2])
+            df.to_csv("Reaction_Tracker.csv")
+            point_df = pd.read_csv('Points.csv', index_col=[0])
+            points = point_df.loc[person]['Points']
+            points = int(points) + 1
+            point_df.at[person, "Points"] = points
+            point_df.to_csv('Points.csv')   
+    elif reaction.emoji.id == 1007263123205533756:
+        value = reaction.emoji.id
+        person = user.id
+        message_id = reaction.message.id
+        df = pd.read_csv("Reaction_Tracker.csv", index_col=[0])
+        refined_df = df[df['Message id'] == message_id]
+        users = refined_df['User id'].values
+        more_refined_df = refined_df[refined_df['User id'] == person]
+        emojis = more_refined_df['Reaction'].values
+        if person not in users:
+            together = {}
+            together['Message id'] = [message_id]
+            together['User id'] = [person]
+            together['Reaction'] = [value]
+            df2 = pd.DataFrame(together)
+            df = pd.concat([df,df2])
+            df.to_csv("Reaction_Tracker.csv")
+            point_df = pd.read_csv('Points.csv', index_col=[0])
+            points = point_df.loc[person]['Points']
+            points = int(points) - 1
+            point_df.at[person, "Points"] = points
+            point_df.to_csv('Points.csv')
+        elif 1007263123205533756 not in emojis:
+            together = {}
+            together['Message id'] = [message_id]
+            together['User id'] = [person]
+            together['Reaction'] = [value]
+            df2 = pd.DataFrame(together)
+            df = pd.concat([df,df2])
+            df.to_csv("Reaction_Tracker.csv")
+            point_df = pd.read_csv('Points.csv', index_col=[0])
+            points = point_df.loc[person]['Points']
+            points = int(points) - 1
+            point_df.at[person, "Points"] = points
+            point_df.to_csv('Points.csv')            
+
+
 
 # @bot.event
 # async def on_message(message):
