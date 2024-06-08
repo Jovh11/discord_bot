@@ -571,7 +571,8 @@ async def on_reaction_add(reaction, user):
             df = pd.concat([df,df2])
             df.to_csv("Reaction_Tracker.csv")
             point_df = pd.read_csv('Points.csv', index_col=[0])
-            points = point_df.loc[person]['Points']
+            point_reciever = reaction.message.author.id
+            points = point_df.loc[point_reciever]['Points']
             points = int(points) + 1
             point_df.at[person, "Points"] = points
             point_df.to_csv('Points.csv')
@@ -584,7 +585,8 @@ async def on_reaction_add(reaction, user):
             df = pd.concat([df,df2])
             df.to_csv("Reaction_Tracker.csv")
             point_df = pd.read_csv('Points.csv', index_col=[0])
-            points = point_df.loc[person]['Points']
+            point_reciever = reaction.message.author.id
+            points = point_df.loc[point_reciever]['Points']
             points = int(points) + 1
             point_df.at[person, "Points"] = points
             point_df.to_csv('Points.csv')   
@@ -606,7 +608,8 @@ async def on_reaction_add(reaction, user):
             df = pd.concat([df,df2])
             df.to_csv("Reaction_Tracker.csv")
             point_df = pd.read_csv('Points.csv', index_col=[0])
-            points = point_df.loc[person]['Points']
+            point_reciever = reaction.message.author.id
+            points = point_df.loc[point_reciever]['Points']
             points = int(points) - 1
             point_df.at[person, "Points"] = points
             point_df.to_csv('Points.csv')
@@ -619,12 +622,31 @@ async def on_reaction_add(reaction, user):
             df = pd.concat([df,df2])
             df.to_csv("Reaction_Tracker.csv")
             point_df = pd.read_csv('Points.csv', index_col=[0])
-            points = point_df.loc[person]['Points']
+            point_reciever = reaction.message.author.id
+            points = point_df.loc[point_reciever]['Points']
             points = int(points) - 1
             point_df.at[person, "Points"] = points
             point_df.to_csv('Points.csv')            
 
-
+# @bot.command(name='give_score', help='This gives you your friend a gamerscore \n')
+# async def score_give(ctx):
+#     if ctx.message.author.bot:
+#         return
+#     reply_message_id = ctx.message.reference.message_id
+#     reply_message = await ctx.fetch_message(reply_message_id)
+#     reply_author = reply_message.author
+#     if reply_author == ctx.message.author:
+#         await ctx.send("Sorry you can't give yourself points")
+#     if ctx.message.reference is not None and reply_author != ctx.message.author:
+#         text = await ctx.channel.fetch_message(ctx.message.reference.message_id)
+#         name = text.author.name
+#         name_id = text.author.id
+#         point_df = pd.read_csv('Points.csv', index_col=[0])
+#         points = point_df.loc[name_id]['Points']
+#         points = int(points) + 1
+#         point_df.at[name_id, "Points"] = points
+#         point_df.to_csv('Points.csv')
+#         await ctx.send(f"{name} you have {points} point(s). That is pretty poggers if I do say so myself.")
 
 # @bot.event
 # async def on_message(message):
