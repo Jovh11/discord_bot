@@ -334,7 +334,7 @@ async def score_count(ctx):
         return
     name = ctx.message.author.name
     author = ctx.message.author.id
-    point_df = pd.read_csv("Points.csv", index_col=[0])
+    point_df = pd.read_csv(POINTS_PATH, index_col=[0])
     points  = point_df.loc[author]["Points"]
     await ctx.send(f"{name} you have {points} point(s) may it be a light in dark times")
 
