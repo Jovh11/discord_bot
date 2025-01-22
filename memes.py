@@ -628,6 +628,64 @@ async def on_reaction_add(reaction, user):
             point_df.at[person, "Points"] = points
             point_df.to_csv('Points.csv')            
 
+@bot.command(name="check", help="Skill Check")
+async def roll20(ctx):
+    try:
+        if ctx.message.author.bot:
+            return
+        str_list = ['Athletics','Strength']
+        dex_list = ['Acrobatics','Stealth','Dexterity']
+        con_list = ['Constitution']
+        int_list = ['Acrcana','History','Investigation','Nature','Religion','Intelligence']
+        wis_list = ['Animal Handling','Insight','Medicine','Perception','Survival','Wisdom']
+        cha_list = ['Deception','Intimidation','Performance','Persuasion','Charisma']
+        stat_list = [str_list,dex_list,con_list,int_list,wis_list,cha_list]
+        size = len(stat_list)
+        attribute_finder = random.randint(0, size -1)
+        chosen_stat = stat_list[attribute_finder]
+        stat_size = len(chosen_stat)
+        stat_finder = random.randint(0,stat_size -1)
+        chosen_val = chosen_stat[stat_finder]
+        opponent_list = ['the Furlbogs','the Slimes','Joeseph Mother','Your Boss','An angry gnome','The divinity of pointlessness','The Bichealshop Quintet','The pope','The lord of the land',
+        'the Goblins','a Deva','a knight','The Potion Seller','An Honest Merchant','Ghen Actis']
+        opp_size = len(opponent_list)
+        opponent_finder = random.randint(0,opp_size -1)
+        opponent = opponent_list[opponent_finder]
+        name = ctx.message.author.name
+        result = random.randint(1,20)
+        msg = f"{name} make a {chosen_val} check. \n"
+        msg2 = f"You rolled a {result} \n"
+        if result < 2:
+            msg3 = f"You have failed your {chosen_val} check against {opponent}"
+        elif result < 10:
+            check =  [0,0,0,1]
+            val = random.randint(0,len(check)-1)
+            if val == 1:
+                msg3 = f"You have passed your {chosen_val} check against {opponent}"
+            else:
+                msg3 = f"You have failed your {chosen_val} check against {opponent}"
+        elif result < 16:
+            check = [0,0,1,1]
+            val = random.randint(0,len(check)-1)
+            if val == 1:
+                msg3 = f"You have passed your {chosen_val} check against {opponent}"
+            else:
+                msg3 = f"You have failed your {chosen_val} check against {opponent}"
+        elif result <20:
+            check = [0,1,1,1]
+            val = random.randint(0,len(check)-1)
+            if val == 1:
+                msg3 = f"You have passed your {chosen_val} check against {opponent}"
+            else:
+                msg3 = f"You have failed your {chosen_val} check against {opponent}"
+        elif result == 20:
+            msg3 = f"You have passed your {chosen_val} check against {opponent}"
+        await ctx.send(msg+msg2+msg3)
+    except Exception as err:
+        print(stat_finder)
+        print(chosen_val)
+
+
 # @bot.command(name='give_score', help='This gives you your friend a gamerscore \n')
 # async def score_give(ctx):
 #     if ctx.message.author.bot:
