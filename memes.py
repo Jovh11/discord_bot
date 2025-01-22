@@ -13,22 +13,16 @@ import io
 import aiohttp
 import scrape_google_images
 import re
-# from constants import *
+from constants import *
 
-MEMES_PATH = "X:\Pictures\Memes"
-REACTIONS_PATH = "X:\Pictures\Reactions"
-HOT_TAKES_PATH = "X:\Pictures\Recipts\All"
-WIN_SLIPS_PATH = "X:\Pictures\Reactions\win.jpg"
-DOG_PATH = "X:\Pictures\Dogs"
-QUOTES_PATH = r"C:\Users\rcrch\Documents\Git\discord_bot\quote_df.csv"
-SERVER_TOPICS_PATH = r"C:\Users\rcrch\Documents\Git\discord_bot\Resources\server.csv"
+
 # cat_path = ""
 meme_list = ['{}/{}'.format(MEMES_PATH, filename) for filename in os.listdir(MEMES_PATH) if not filename.endswith('.csv')]
 react_list = ['{}/{}'.format(REACTIONS_PATH, filename) for filename in os.listdir(REACTIONS_PATH)]
 hottakes_list = ['{}/{}'.format(HOT_TAKES_PATH, filename) for filename in os.listdir(HOT_TAKES_PATH)]
 win_slips = WIN_SLIPS_PATH
 dog_list = ['{}/{}'.format(DOG_PATH, filename) for filename in os.listdir(DOG_PATH)]
-# cat_list = ['{}/{}'.format(CAT_PATH, filename) for filename in os.listdir(DOG_PATH) if not filename.endswith('.csv')]
+cat_list = ['{}/{}'.format(CAT_PATH, filename) for filename in os.listdir(CAT_PATH) if not filename.endswith('.csv')]
 wowbow = 0
 
 class CustomerHelpCommand(commands.HelpCommand):
@@ -327,11 +321,11 @@ async def eight(ctx):
 #         text = await ctx.channel.fetch_message(ctx.message.reference.message_id)
 #         name = text.author.name
 #         name_id = text.author.id
-#         point_df = pd.read_csv('Points.csv', index_col=[0])
+#         point_df = pd.read_csv(POINTS_PATH, index_col=[0])
 #         points = point_df.loc[name_id]['Points']
 #         points = int(points) + 1
 #         point_df.at[name_id, "Points"] = points
-#         point_df.to_csv('Points.csv')
+#         point_df.to_csv(POINTS_PATH)
 #         await ctx.send(f"{name} you have {points} point(s). That is pretty poggers if I do say so myself.")
 
 @bot.command(name="score_count", help="This will give you your gamerscore \n")
@@ -373,21 +367,21 @@ async def on_message(message):
         return
     
     ## TODO: Fix Elon Command Username storage to be dynamic & remove try/except
-    try:
-        name = message.author.name
-        no_spaces = name.replace(' ','')
-        new_name = message.author.discriminator
-        combined = no_spaces+'#'+new_name
-        elon_df = pd.read_csv(ELON_PATH, index_col=[0])
-        elon_status = elon_df.loc[combined][0]
-        if elon_status == 1:
-            await message.channel.send(f'Boss that is a great idea you are the smartestest and greatest owner of Twitter and Telsa I have ever met. Have I mentioned how disruptive your business strategy is?')
-            options = [0,1]
-            num = options[random.randint(0,(len(options) -1))]
-            elon_df.loc[combined][0] = num
-            elon_df.to_csv(ELON_PATH)
-    except:
-        pass
+    # try:
+    #     name = message.author.name
+    #     no_spaces = name.replace(' ','')
+    #     new_name = message.author.discriminator
+    #     combined = no_spaces+'#'+new_name
+    #     elon_df = pd.read_csv(ELON_PATH, index_col=[0])
+    #     elon_status = elon_df.loc[combined][0]
+    #     if elon_status == 1:
+    #         await message.channel.send(f'Boss that is a great idea you are the smartestest and greatest owner of Twitter and Telsa I have ever met. Have I mentioned how disruptive your business strategy is?')
+    #         options = [0,1]
+    #         num = options[random.randint(0,(len(options) -1))]
+    #         elon_df.loc[combined][0] = num
+    #         elon_df.to_csv(ELON_PATH)
+    # except:
+    #     pass
     await bot.process_commands(message)
 
 @bot.command(name='elon-ball', help='This will answer your question but you hold his paycheck and or family hostage \n')
@@ -557,7 +551,7 @@ async def on_reaction_add(reaction, user):
         value = reaction.emoji.id
         person = user.id
         message_id = reaction.message.id
-        df = pd.read_csv("Reaction_Tracker.csv", index_col=[0])
+        df = pd.read_csv(REACTION_TRACKER_PATH, index_col=[0])
         refined_df = df[df['Message id'] == message_id]
         users = refined_df['User id'].values
         more_refined_df = refined_df[refined_df['User id'] == person]
@@ -569,13 +563,13 @@ async def on_reaction_add(reaction, user):
             together['Reaction'] = [value]
             df2 = pd.DataFrame(together)
             df = pd.concat([df,df2])
-            df.to_csv("Reaction_Tracker.csv")
-            point_df = pd.read_csv('Points.csv', index_col=[0])
+            df.to_csv(REACTION_TRACKER_PATH)
+            point_df = pd.read_csv(POINTS_PATH, index_col=[0])
             point_reciever = reaction.message.author.id
             points = point_df.loc[point_reciever]['Points']
             points = int(points) + 1
             point_df.at[person, "Points"] = points
-            point_df.to_csv('Points.csv')
+            point_df.to_csv(POINTS_PATH)
         elif 1007263173361012927 not in emojis:
             together = {}
             together['Message id'] = [message_id]
@@ -583,18 +577,18 @@ async def on_reaction_add(reaction, user):
             together['Reaction'] = [value]
             df2 = pd.DataFrame(together)
             df = pd.concat([df,df2])
-            df.to_csv("Reaction_Tracker.csv")
-            point_df = pd.read_csv('Points.csv', index_col=[0])
+            df.to_csv(REACTION_TRACKER_PATH)
+            point_df = pd.read_csv(POINTS_PATH, index_col=[0])
             point_reciever = reaction.message.author.id
             points = point_df.loc[point_reciever]['Points']
             points = int(points) + 1
             point_df.at[person, "Points"] = points
-            point_df.to_csv('Points.csv')   
+            point_df.to_csv(POINTS_PATH)   
     elif reaction.emoji.id == 1007263123205533756:
         value = reaction.emoji.id
         person = user.id
         message_id = reaction.message.id
-        df = pd.read_csv("Reaction_Tracker.csv", index_col=[0])
+        df = pd.read_csv(REACTION_TRACKER_PATH, index_col=[0])
         refined_df = df[df['Message id'] == message_id]
         users = refined_df['User id'].values
         more_refined_df = refined_df[refined_df['User id'] == person]
@@ -606,13 +600,13 @@ async def on_reaction_add(reaction, user):
             together['Reaction'] = [value]
             df2 = pd.DataFrame(together)
             df = pd.concat([df,df2])
-            df.to_csv("Reaction_Tracker.csv")
-            point_df = pd.read_csv('Points.csv', index_col=[0])
+            df.to_csv(REACTION_TRACKER_PATH)
+            point_df = pd.read_csv(POINTS_PATH, index_col=[0])
             point_reciever = reaction.message.author.id
             points = point_df.loc[point_reciever]['Points']
             points = int(points) - 1
             point_df.at[person, "Points"] = points
-            point_df.to_csv('Points.csv')
+            point_df.to_csv(POINTS_PATH)
         elif 1007263123205533756 not in emojis:
             together = {}
             together['Message id'] = [message_id]
@@ -620,13 +614,13 @@ async def on_reaction_add(reaction, user):
             together['Reaction'] = [value]
             df2 = pd.DataFrame(together)
             df = pd.concat([df,df2])
-            df.to_csv("Reaction_Tracker.csv")
-            point_df = pd.read_csv('Points.csv', index_col=[0])
+            df.to_csv(REACTION_TRACKER_PATH)
+            point_df = pd.read_csv(POINTS_PATH, index_col=[0])
             point_reciever = reaction.message.author.id
             points = point_df.loc[point_reciever]['Points']
             points = int(points) - 1
             point_df.at[person, "Points"] = points
-            point_df.to_csv('Points.csv')            
+            point_df.to_csv(POINTS_PATH)            
 
 @bot.command(name="check", help="Skill Check")
 async def roll20(ctx):
@@ -699,11 +693,11 @@ async def roll20(ctx):
 #         text = await ctx.channel.fetch_message(ctx.message.reference.message_id)
 #         name = text.author.name
 #         name_id = text.author.id
-#         point_df = pd.read_csv('Points.csv', index_col=[0])
+#         point_df = pd.read_csv(POINTS_PATH, index_col=[0])
 #         points = point_df.loc[name_id]['Points']
 #         points = int(points) + 1
 #         point_df.at[name_id, "Points"] = points
-#         point_df.to_csv('Points.csv')
+#         point_df.to_csv(POINTS_PATH)
 #         await ctx.send(f"{name} you have {points} point(s). That is pretty poggers if I do say so myself.")
 
 # @bot.event
