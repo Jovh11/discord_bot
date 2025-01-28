@@ -654,21 +654,24 @@ async def roll20(ctx):
         elif result < 10:
             check =  [0,0,0,1]
             val = random.randint(0,len(check)-1)
-            if val == 1:
+            test = check[val]
+            if test == 1:
                 msg3 = f"You have passed your {chosen_val} check against {opponent}"
             else:
                 msg3 = f"You have failed your {chosen_val} check against {opponent}"
         elif result < 16:
             check = [0,0,1,1]
             val = random.randint(0,len(check)-1)
-            if val == 1:
+            test = check[val]
+            if test == 1:
                 msg3 = f"You have passed your {chosen_val} check against {opponent}"
             else:
                 msg3 = f"You have failed your {chosen_val} check against {opponent}"
         elif result <20:
             check = [0,1,1,1]
             val = random.randint(0,len(check)-1)
-            if val == 1:
+            test = check[val]
+            if test == 1:
                 msg3 = f"You have passed your {chosen_val} check against {opponent}"
             else:
                 msg3 = f"You have failed your {chosen_val} check against {opponent}"
